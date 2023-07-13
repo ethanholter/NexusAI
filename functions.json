@@ -1,0 +1,16 @@
+[
+    {
+        "name": "toggleLights",
+                "description": "turn the lights on or off. Returns False if the lights were already in the requested state",
+                "parameters": {
+                    "type": "object",
+                    "properties": {
+                        "newState": {
+                            "type": "boolean",
+                            "description": "True to turn on the lights and False for off"
+                        }
+                    },
+                    "required": ["newState"]
+                }
+    }
+]
