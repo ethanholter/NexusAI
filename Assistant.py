@@ -3,6 +3,8 @@ import os
 
 import openai
 
+from ELTTS import speakText
+
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 # ---------------------------------
@@ -82,6 +84,7 @@ class Assistant:
                     break
 
             # If a function is called then execute the function and add it to the messages
+            # TODO add error handeling because the language model sucks at following instructions
             else:
                 function_call = message.get("function_call")
                 if function_call:
@@ -123,5 +126,6 @@ if __name__ == "__main__":
             
             response = assistant.processInput(userInput)
             print("Jarvis: " + response)
+            speakText(response)
         except KeyboardInterrupt:
             break
