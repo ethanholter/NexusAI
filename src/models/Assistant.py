@@ -5,18 +5,13 @@ import warnings
 
 import openai
 
-from ELTTS import speakText
-
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-DISABLE_TTS = True
-if DISABLE_TTS: 
-    warnings.warn("Text-to-speech is currently disabled to save API usage minutes", UserWarning)
+
 
 # ---------------------------------
 # Main Class
 # ---------------------------------
-
 
 class Assistant:
     def __init__(self, model="gpt-3.5-turbo", system_prompt="",verbose=False):
@@ -97,29 +92,3 @@ class Assistant:
                 )
            
         return result
-
-
-# For testing purposes. simple conversation in command line
-if __name__ == "__main__":
-    assistant = Assistant(verbose=True)
-    
-    with open(f"{sys.path[0]}/../system_prompt.txt") as system_prompt:
-        assistant.setSystemPrompt(system_prompt.read())
-    
-    with open(f"{sys.path[0]}/../toolkits.json") as functions:
-        assistant.setFunctions(json.load(functions))
-
-    while True:
-        try:
-            userInput = input("User: ")
-            
-            if not userInput:
-                break
-            
-            response = assistant.processInput(userInput)
-            print("Jarvis: " + response)
-            
-            if not DISABLE_TTS:
-                speakText(response)
-        except KeyboardInterrupt:
-            break
