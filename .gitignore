@@ -2,4 +2,5 @@ venv/
 testing_venv/
 .vscode/
 *.pyc
-*.cache
+*.cache*
+temp/*
