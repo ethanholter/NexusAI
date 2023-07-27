@@ -14,31 +14,19 @@ if DISABLE_TTS:
     warnings.warn("Text-to-speech is currently disabled to save API usage minutes", UserWarning)
 
 # ---------------------------------
-# Helper Functions (for testing)
-# ---------------------------------
-
-# place holder for now to test the AI's ability to properly call functions
-def toggleLights(newState):
-    print(
-        f"Hello World! This is the test function! The lights have been turned {'On' if newState else 'Off'}"
-    )
-    return {"result": "Lights already on"}
-
-
-# ---------------------------------
 # Main Class
 # ---------------------------------
 
 
 class Assistant:
-    def __init__(self, model="gpt-3.5-turbo", system_prompt="", stream=False):
+    def __init__(self, model="gpt-3.5-turbo", system_prompt="",verbose=False):
         self.model = model
         self.temp = 0.5
         self.max_iterations = 4
         self.system_prompt = system_prompt
-        self.stream = stream
         self.functions = ""
         self.messageBuffer = [{"role": "system", "content": self.system_prompt}]
+        self.verbose = verbose
 
     # The system prompt tells the language model how it is supposed to behave. e.g. "you are a helpful assistant"
     def setSystemPrompt(self, system_prompt):
@@ -78,6 +66,9 @@ class Assistant:
             choice = response["choices"][0]
             message = choice.get("message")
             content = message.get("content")
+            
+            if self.verbose:
+                print(response)
 
             # API will respond with either a message or a function call
             # If a message is received then print the message
@@ -100,27 +91,22 @@ class Assistant:
                 if not function_call:
                     raise (Exception)
 
-                if function_name == "toggleLights":
-                    func_result = (
-                        "True"
-                        if toggleLights(function_args.get("newState"))
-                        else "False"
-                    )
 
                 self.messageBuffer.append(
-                    {"role": "function", "name": function_name, "content": func_result}
+                    {"role": "function", "name": function_name, "content": "Action Successful"}
                 )
+           
         return result
 
 
 # For testing purposes. simple conversation in command line
 if __name__ == "__main__":
-    assistant = Assistant()
+    assistant = Assistant(verbose=True)
     
     with open(f"{sys.path[0]}/../system_prompt.txt") as system_prompt:
         assistant.setSystemPrompt(system_prompt.read())
     
-    with open(f"{sys.path[0]}/../functions.json") as functions:
+    with open(f"{sys.path[0]}/../toolkits.json") as functions:
         assistant.setFunctions(json.load(functions))
 
     while True:
