@@ -1,0 +1,30 @@
+[
+    {
+        "name": "spotify_toolkit",
+        "description": "This toolkit allows interaction with spotify to play music and podcasts. Do NOT provide more than one argument. Use natural language to describe your intent",
+        "parameters": {
+            "type": "object",
+            "required": ["action"],
+            "properties": {
+                "action": {
+                    "type": "string",
+                    "description": "Action you would like performed"
+                }
+            }
+        }
+    },
+    {
+        "name": "home_toolkit",
+        "description": "This toolkit allows interaction with smart home systems",
+        "parameters": {
+            "type": "object",
+            "required": ["action"],
+            "properties": {
+                "action": {
+                    "type": "string",
+                    "description": "Action you would like performed"
+                }
+            }
+        }
+    }
+]
