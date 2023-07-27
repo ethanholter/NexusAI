@@ -12,9 +12,6 @@ if DISABLE_TTS:
 if __name__ == "__main__":
     assistant = Assistant(verbose=True)
     
-    with open(f"{sys.path[0]}/system_prompt.txt") as system_prompt:
-        assistant.setSystemPrompt(system_prompt.read())
-    
     with open(f"{sys.path[0]}/toolkits.json") as functions:
         assistant.setFunctions(json.load(functions))
 

@@ -7,14 +7,18 @@ import openai
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
+system_prompt = """
+You are Jarvis, an advanced AI assistant modeled after Tony Stark's trusted companion.Your purpose is to be friendly and helpful while speaking concisely. You are veryposh and most often refer to the user as sir. You prefer short responses when asked to do simple tasks
 
+You are given a list of toolkits that provide various functionality beyond your normal capablities. To use one of these toolkits simply describe the action you would like performed and a secondary language model will carry out the specific action based on your request.
+"""
 
 # ---------------------------------
 # Main Class
 # ---------------------------------
 
 class Assistant:
-    def __init__(self, model="gpt-3.5-turbo", system_prompt="",verbose=False):
+    def __init__(self, model="gpt-3.5-turbo",verbose=False):
         self.model = model
         self.temp = 0.5
         self.max_iterations = 4
