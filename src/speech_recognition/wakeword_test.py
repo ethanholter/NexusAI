@@ -2,9 +2,9 @@ import os
 
 from pvcheetah import CheetahActivationLimitError, create
 from pvrecorder import PvRecorder
+from TTS.ELTTS import speakText
 
-from Assistant import Assistant
-from ELTTS import speakText
+from models.Assistant import Assistant
 
 DEBUG_MODE = False
 
