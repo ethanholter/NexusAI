@@ -5,6 +5,8 @@ import warnings
 
 import openai
 
+from .Agent import Agent
+
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 system_prompt = """
@@ -26,6 +28,9 @@ class Assistant:
         self.functions = ""
         self.messageBuffer = [{"role": "system", "content": self.system_prompt}]
         self.verbose = verbose
+        
+        
+        self.agent = Agent(verbose=verbose)
 
     # The system prompt tells the language model how it is supposed to behave. e.g. "you are a helpful assistant"
     def setSystemPrompt(self, system_prompt):
@@ -90,9 +95,10 @@ class Assistant:
                 if not function_call:
                     raise (Exception)
 
+                response = self.agent.run(function_name, function_args.get("query"))
 
                 self.messageBuffer.append(
-                    {"role": "function", "name": function_name, "content": "Action Successful"}
+                    {"role": "function", "name": function_name, "content": response}
                 )
            
         return result

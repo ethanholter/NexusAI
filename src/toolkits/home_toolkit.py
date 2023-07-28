@@ -1,5 +1,5 @@
-def toggleLights(newState: bool):
-    print("Lights now set to " + newState)
+def toggleLights(newState):
+    print("\x1b[1;36m" + "Lights now set to " + str(newState['newState']) + "\x1b[0m")
     
 def toggleAC(newState: bool):
     print("AC now set to " + newState)
@@ -7,20 +7,17 @@ def toggleAC(newState: bool):
 def getTemp(room: str):
     return "73 F"
 
-
-class Tool:
-    def __init__(self, name, desc, func, parameters):
-        self.name = name
-        self.desc = desc
-        self.func = func
-        self.parameters = parameters
+functionMap = {
+    "toggle_lights":toggleLights,
+    "toggle_AC": toggleAC,
+    "get_temp":getTemp
+    }
 
 functions = [
-    Tool(
-        name="toggle_lights",
-        desc="Turns the lights on/off",
-        func=toggleLights,
-        parameters= {
+        {
+        "name": "toggle_lights",
+        "description": "Turns the lights on/off",
+        "parameters": {
             "type": "object",
             "required": ["newState"],
             "properties": {
@@ -30,12 +27,11 @@ functions = [
                 }
             }
         }
-    ),
-    Tool(
-        name="toggleAC",
-        desc="Turns the AC on/off",
-        func=toggleLights,
-        parameters={
+        },
+    {
+        "name": "toggle_AC",
+        "description": "Turns the AC on/off",
+        "parameters": {
             "type": "object",
             "required": ["newState"],
             "properties": {
@@ -45,5 +41,8 @@ functions = [
                 }
             }
         }
-    )
+    }
 ]
+
+def callFunction(name, args):
+    functionMap[name](args)
