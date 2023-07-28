@@ -10,10 +10,10 @@ if DISABLE_TTS:
     print("\x1b[1;33m" + "Warning: Text-To-Speech disabled to conserve API calls" + "\x1b[0m")
 
 if __name__ == "__main__":
-    assistant = Assistant(verbose=True)
+    assistant = Assistant(verbose=False)
     
-    with open(f"{sys.path[0]}/toolkits.json") as functions:
-        assistant.setFunctions(json.load(functions))
+    with open(f"{sys.path[0]}/toolkits.json") as file:
+        assistant.setFunctions(json.load(file))
 
     while True:
         try:
@@ -27,5 +27,6 @@ if __name__ == "__main__":
             
             if not DISABLE_TTS:
                 speakText(response)
+                
         except KeyboardInterrupt:
             break
