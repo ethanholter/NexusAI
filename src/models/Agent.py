@@ -50,22 +50,17 @@ class Agent:
         
         if not function_call:
             raise (Exception)
-        
-        
-        
+           
         function_name = function_call["name"]
         function_args = json.loads(message["function_call"]["arguments"])
         
-        
-        # if toolkit_name == "home_toolkit":
-        #     home_toolkit.callFunction(function_name, function_args)
+        if self.verbose:
+            print("\x1b[1;36m" + f"Attempting to use '{function_name.title()}'" + "\x1b[0m")
         
         if toolkit_name == "spotify_toolkit":
             result = spotify_toolkit.run(function_name, **function_args)
         
         
-        if self.verbose:
-            print(response)
         
         return result
         
