@@ -5,10 +5,10 @@ import warnings
 
 import openai
 
-from ..toolkits import home_toolkit, spotify_toolkit
+from ..toolkits.spotify_toolkit import spotify_toolkit
 
 system_prompt = """
-You are a secondary language model designed to supplement a seperate main model. Your job is to receive instructions from the main model and then execute a function based on those instructions. You will always call a function. 
+You are a secondary language model designed to supplement a seperate main model. Your job is to receive instructions from the main model and then execute a function based on those instructions. You will always call a function. If a function has the parameter 'dummy_property' then provide no parameter.
 """
 
 class Agent:
@@ -27,17 +27,18 @@ class Agent:
         self.functions = functions
         
     def run(self, toolkit_name, query):
-        if toolkit_name == "home_toolkit":
-            self.setFunctions(home_toolkit.functions)
+        # if toolkit_name == "home_toolkit":
+        #     self.setFunctions(home_toolkit.getToolJSON())
         
         if toolkit_name == "spotify_toolkit":
-            self.setFunctions(spotify_toolkit.functions)
+            self.setFunctions(spotify_toolkit.getToolJSON())
         
+        self.messageBuffer.append({"role": "user", "content": query})
         response = openai.ChatCompletion.create(
             model=self.model,
             stream=False,
             temperature=self.temp,
-            messages=[{"role": "user", "content": query}],
+            messages=self.messageBuffer,
             functions=self.functions,
             function_call="auto",
         )
@@ -56,15 +57,15 @@ class Agent:
         function_args = json.loads(message["function_call"]["arguments"])
         
         
-        if toolkit_name == "home_toolkit":
-            home_toolkit.callFunction(function_name, function_args)
+        # if toolkit_name == "home_toolkit":
+        #     home_toolkit.callFunction(function_name, function_args)
         
         if toolkit_name == "spotify_toolkit":
-            self.setFunctions(spotify_toolkit.functions)
+            result = spotify_toolkit.run(function_name, **function_args)
         
         
         if self.verbose:
             print(response)
         
-        return "Success"
+        return result
         
