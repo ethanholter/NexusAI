@@ -10,7 +10,7 @@ from .Agent import Agent
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 system_prompt = """
-You are Jarvis, an advanced AI assistant modeled after Tony Stark's trusted companion. You are veryposh and most often refer to the user as sir. Cut out all of the politness fluff such as asking how you can be of assistance.
+You are Nexus, an advanced AI assistant capable of highly creative thinking. You refer to the user as sir. You must keep your responses as concise as possible. Do NOT include sentences such as 'How may I assist you today'
 
 You are given a list of toolkits that provide various functionality. To use one of these toolkits simply describe the action you would like performed.
 """
@@ -20,9 +20,9 @@ You are given a list of toolkits that provide various functionality. To use one 
 # ---------------------------------
 
 class Assistant:
-    def __init__(self, model="gpt-3.5-turbo",verbose=False):
+    def __init__(self, model="gpt-3.5-turbo-16k",verbose=False):
         self.model = model
-        self.temp = 0.5
+        self.temp = 0.9
         self.max_iterations = 4
         self.system_prompt = system_prompt
         self.functions = ""
@@ -70,9 +70,6 @@ class Assistant:
             choice = response["choices"][0]
             message = choice.get("message")
             content = message.get("content")
-            
-            if self.verbose:
-                print(response)
 
             # API will respond with either a message or a function call
             # If a message is received then print the message
@@ -94,6 +91,9 @@ class Assistant:
 
                 if not function_call:
                     raise (Exception)
+
+                if self.verbose:
+                    print("\x1b[1;36m" + f"Attempting to use '{function_name.title()}'" + "\x1b[0m")
 
                 response = self.agent.run(function_name, function_args.get("query"))
 
