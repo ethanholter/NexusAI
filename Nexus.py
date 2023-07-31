@@ -10,7 +10,7 @@ if DISABLE_TTS:
     print("\x1b[1;33m" + "Warning: Text-To-Speech disabled to conserve API calls" + "\x1b[0m")
 
 if __name__ == "__main__":
-    assistant = Assistant(verbose=False)
+    assistant = Assistant(verbose=True)
     
     with open(f"{sys.path[0]}/toolkits.json") as file:
         assistant.setFunctions(json.load(file))
@@ -23,7 +23,7 @@ if __name__ == "__main__":
                 break
             
             response = assistant.processInput(userInput)
-            print("\x1b[1;37m" + "Jarvis: " + response + "\x1b[0m")
+            print("\x1b[1;37m" + "Nexus: " + response + "\x1b[0m")
             
             if not DISABLE_TTS:
                 speakText(response)
